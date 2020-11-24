@@ -1,0 +1,13 @@
+package ru.vood.hazelcastgraph2;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HazelcastGraph2Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(HazelcastGraph2Application.class, args);
+    }
+
+}
