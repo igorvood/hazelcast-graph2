@@ -24,7 +24,7 @@ import static com.hazelcast.jet.pipeline.WindowDefinition.sliding;
 import static com.hazelcast.jet.pipeline.WindowDefinition.tumbling;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-@Component
+//@Component
 public class JavaRunTrade implements CommandLineRunner {
 
     private static final int TRADES_PER_SEC = 5000;
