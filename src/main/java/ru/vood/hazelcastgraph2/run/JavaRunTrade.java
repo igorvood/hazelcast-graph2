@@ -1,4 +1,4 @@
-package ru.vood.hazelcastgraph2;
+package ru.vood.hazelcastgraph2.run;
 
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
