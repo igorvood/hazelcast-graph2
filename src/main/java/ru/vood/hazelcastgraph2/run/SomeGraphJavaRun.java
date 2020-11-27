@@ -5,9 +5,10 @@ import com.hazelcast.function.FunctionEx;
 import com.hazelcast.jet.core.Processor;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.SourceBuilder;
+import com.hazelcast.jet.pipeline.StreamSource;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.vood.hazelcastgraph2.dto.SomeData;
+import ru.vood.hazelcastgraph2.dto.SomeDataJava;
 
 @Component
 public class SomeGraphJavaRun implements CommandLineRunner {
@@ -16,23 +17,25 @@ public class SomeGraphJavaRun implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Pipeline pipeline = Pipeline.create();
 
-        /*SourceBuilder
+        SourceBuilder<SomeDataJava>.TimestampedStream<Void> voidTimestampedStream = SourceBuilder
                 .timestampedStream("trade-source"
-                        , new FunctionEx<Processor.Context, SomeData>() {
+                        , new FunctionEx<Processor.Context, SomeDataJava>() {
                             @Override
-                            public SomeData applyEx(Processor.Context context) throws Exception {
-                                return new SomeData("f1", "f2", "f3");
+                            public SomeDataJava applyEx(Processor.Context context) throws Exception {
+                                return new SomeDataJava("f1", "f2", "f3");
                             }
                         }
-                )
+                );
+        SourceBuilder<SomeDataJava>.TimestampedStream<SomeDataJava> someDataJavaTimestampedStream = voidTimestampedStream
                 .fillBufferFn(
-                        new BiConsumerEx<SomeData, SourceBuilder.TimestampedSourceBuffer<SomeData>>() {
+                        new BiConsumerEx<SomeDataJava, SourceBuilder.TimestampedSourceBuffer<SomeDataJava>>() {
                             @Override
-                            public void acceptEx(SomeData obj, SourceBuilder.TimestampedSourceBuffer<SomeData> buf) throws Exception {
+                            public void acceptEx(SomeDataJava obj, SourceBuilder.TimestampedSourceBuffer<SomeDataJava> buf) throws Exception {
                                 buf.add(obj, System.currentTimeMillis()
                                 );
                             }
-                        })
-                .build();*/
+                        });
+        StreamSource<SomeDataJava> build = someDataJavaTimestampedStream
+                .build();
     }
 }
