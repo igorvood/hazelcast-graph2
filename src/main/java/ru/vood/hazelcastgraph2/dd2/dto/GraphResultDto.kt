@@ -6,4 +6,4 @@ import java.util.concurrent.CopyOnWriteArrayList
 data class GraphResultDto(
         val generatorDataDto: GeneratorDataDto,
         val resultCheck: CopyOnWriteArrayList<CheckResultDto> = CopyOnWriteArrayList()
-):Serializable
+) : Serializable

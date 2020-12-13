@@ -9,7 +9,6 @@ import com.hazelcast.jet.pipeline.SourceBuilder
 import com.hazelcast.jet.pipeline.SourceBuilder.TimestampedSourceBuffer
 import com.hazelcast.jet.pipeline.StreamStage
 import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
 import java.io.Serializable
 
 //@Component

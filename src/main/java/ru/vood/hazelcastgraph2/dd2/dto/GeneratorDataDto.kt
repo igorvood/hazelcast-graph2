@@ -2,7 +2,7 @@ package ru.vood.hazelcastgraph2.dd2.dto
 
 import java.io.Serializable
 
- data class GeneratorDataDto(
+data class GeneratorDataDto(
         val bsnKey: String,
         val graphName: String,
         val context: HashMap<String, Any>,

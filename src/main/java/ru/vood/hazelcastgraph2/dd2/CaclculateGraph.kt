@@ -116,7 +116,7 @@ class CaclculateGraph : CommandLineRunner, Serializable {
                             val streamStage = streamStage(node, childGenerator)
                             firstEdge = mergeIfNotNull(firstEdge, streamStage)
 
-                       }
+                        }
                         else -> {
                             throw IllegalStateException("""Не поддерживаемый тип ${node.type()}""")
                         }
