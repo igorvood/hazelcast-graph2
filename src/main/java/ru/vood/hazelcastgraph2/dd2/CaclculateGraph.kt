@@ -15,7 +15,7 @@ import ru.vood.hazelcastgraph2.dd2.dto.GraphResultDto
 import ru.vood.hazelcastgraph2.dd2.dto.dict.*
 import java.io.Serializable
 
-@Component
+//@Component
 class CaclculateGraph : CommandLineRunner, Serializable {
     companion object {
         const val BSN_KEY = "BSN_KEY"
