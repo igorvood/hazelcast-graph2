@@ -16,7 +16,10 @@
 
 package ru.vood.hazelcastgraph2.tradeExample;
 
+import com.hazelcast.function.BiConsumerEx;
+import com.hazelcast.function.FunctionEx;
 import com.hazelcast.jet.accumulator.LongLongAccumulator;
+import com.hazelcast.jet.core.Processor;
 import com.hazelcast.jet.pipeline.SourceBuilder;
 import com.hazelcast.jet.pipeline.SourceBuilder.TimestampedSourceBuffer;
 import com.hazelcast.jet.pipeline.StreamSource;
@@ -128,12 +131,22 @@ public final class TradeSource {
         }
         return SourceBuilder
                 .timestampedStream("trade-source",
-                        x -> new TradeGenerator(numTickers, tradesPerSec, maxLag))
-                .fillBufferFn(TradeGenerator::generateTrades)
+                        new FunctionEx<Processor.Context, TradeGenerator>() {
+                            @Override
+                            public TradeGenerator applyEx(Processor.Context x) throws Exception {
+                                return new TradeGenerator(numTickers, tradesPerSec, maxLag);
+                            }
+                        })
+                .fillBufferFn(new BiConsumerEx<TradeGenerator, TimestampedSourceBuffer<Trade>>() {
+                    @Override
+                    public void acceptEx(TradeGenerator tradeGenerator, TimestampedSourceBuffer<Trade> buf) throws Exception {
+                        tradeGenerator.generateTrades(buf);
+                    }
+                })
                 .build();
     }
 
-    private static final class TradeGenerator {
+    public static final class TradeGenerator {
 
         private static final int LOT = 100;
         private static final long MONEY_SCALE_FACTOR = 1000L;
@@ -147,7 +160,7 @@ public final class TradeSource {
 
         private long scheduledTimeNanos;
 
-        private TradeGenerator(long numTickers, int tradesPerSec, int maxLagMillis) {
+        public  TradeGenerator(long numTickers, int tradesPerSec, int maxLagMillis) {
             this.tickers = loadTickers(numTickers);
             this.maxLagNanos = MILLISECONDS.toNanos(maxLagMillis);
             this.pricesAndTrends = tickers.stream()
@@ -187,7 +200,7 @@ public final class TradeSource {
             }
         }
 
-        private void generateTrades(TimestampedSourceBuffer<Trade> buf) {
+        public void generateTrades(TimestampedSourceBuffer<Trade> buf) {
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
             long nowNanos = System.nanoTime();
             while (scheduledTimeNanos <= nowNanos) {
